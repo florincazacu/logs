@@ -1,0 +1,27 @@
+version: '2'
+services:
+  elk:
+    image: localhost:5000/logs/elk
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      # Ports unused for access from the host so far
+      #- "5044:5044"
+      #- "4560:4560"
+
+  ms-1:
+    image: localhost:5000/logs/ms-1
+    depends_on:
+      - elk
+    ports:
+      - "8081:8081"
+
+  ms-2:
+    image: localhost:5000/logs/ms-2
+    depends_on:
+      - elk
+
+  ms-3:
+    image: localhost:5000/logs/ms-3
+    depends_on:
+      - elk

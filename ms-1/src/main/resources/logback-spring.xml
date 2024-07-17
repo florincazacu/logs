@@ -1,0 +1,16 @@
+<configuration>
+	<appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+		<destination>elk:4560</destination>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
+			<customFields>{"service_name":"ms-1"}</customFields>
+			<pattern>D:%d{yyyy-MM-dd HH:mm:ss.SSS} trace_id=%X{traceId:-} span_id=%X{spanId:-} L:%p C:%c{1} F:%F\(%L\) Fn:%M T:%thread R:%X{R} - %m%n</pattern>
+			<fieldNames>
+				<message>log_message</message>
+			</fieldNames>
+			<keepAliveDuration>5 minutes</keepAliveDuration>
+		</encoder>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="logstash" />
+	</root>
+</configuration>

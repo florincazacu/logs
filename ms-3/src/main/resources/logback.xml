@@ -2,7 +2,7 @@
     <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>elk:4560</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <customFields>{"service_name":"ms-2"}</customFields>
+            <customFields>{"service_name":"ms-3"}</customFields>
             <pattern>D:%d{yyyy-MM-dd HH:mm:ss.SSS} trace_id=%X{traceId:-} span_id=%X{spanId:-} L:%p C:%c{1} F:%F\(%L\) Fn:%M T:%thread R:%X{R} - %m%n</pattern>
             <fieldNames>
                 <message>log_message</message>
@@ -10,7 +10,27 @@
             <keepAliveDuration>5 minutes</keepAliveDuration>
         </encoder>
     </appender>
+
+    <!-- Define a separate appender for error logs -->
+    <appender name="logstash-error" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>elk:4560</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"service_name":"ms-3"}</customFields>
+            <pattern>D:%d{yyyy-MM-dd HH:mm:ss.SSS} trace_id=%X{traceId:-} span_id=%X{spanId:-} L:%p C:%c{1} F:%F\(%L\) Fn:%M T:%thread R:%X{R} - %m%n</pattern>
+            <fieldNames>
+                <message>log_message</message>
+            </fieldNames>
+            <keepAliveDuration>5 minutes</keepAliveDuration>
+        </encoder>
+        <!-- Set a threshold to filter ERROR level messages -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <!-- Configure the root logger to include both appenders -->
     <root level="INFO">
         <appender-ref ref="logstash" />
+        <appender-ref ref="logstash-error" />
     </root>
 </configuration>

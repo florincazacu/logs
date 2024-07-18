@@ -25,3 +25,8 @@ services:
     image: localhost:5000/logs/ms-3
     depends_on:
       - elk
+
+  ms-4:
+    image: localhost:5000/logs/ms-4
+    depends_on:
+      - elk
